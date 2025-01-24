@@ -1,3 +1,5 @@
+"use strict"
+
 import Node from "./node.js"
 import {
   assert,
@@ -9,25 +11,25 @@ import {
  * @template T
  */
 export default class Collection {
+  /**
+   * @param {...T} items
+   */
+  constructor(...items) {
+    if (items.length > 1) {
+      this.head = Node.prepare(items).head
+      Array()
+    }
+  }
+
   /** @type {Node<T>} */
   _head = null
 
-  /**
-   * @param {{ 
-   * _typeDefinition: T,
-   * _typeDefinitionFromIterable: Iterable<T> | Array<T> | ArrayLike<T>,
-   * }} options
-   */
-  constructor(options) {
-
-  }
-
   set head(node) {
     assert(Node.isNode(node) || isNotDefined(this.data), "head must be a Node or null")
-    this._head = node
+    this._head = (node || null)
   }
 
-  get head() { return this._head }
+  get head() { return (this._head || null) }
 
   get tail() {
     var curr = this.head
@@ -93,8 +95,8 @@ export default class Collection {
   /**
    * @return {this}
    */
-  clone(options) {
-    var clone = new this.constructor(options)
+  clone() {
+    var clone = new this.constructor()
     var preparedNodes = Node.prepare(this)
     clone.head = preparedNodes.head
 
@@ -133,6 +135,8 @@ export default class Collection {
     return array
   }
 
+  toString() { return `[${this.constructor.name} nodes:${this.length}]` }
+
   /**
    * @param {(
    * value: T,
@@ -152,16 +156,14 @@ export default class Collection {
     return this
   }
 
-  toString() { return `[${this.constructor.name} nodes:${this.length}]` }
-
   /**
    * @template T
-   * @param {Iterable<T> | Array<T>} iterable
-   * @param { (value: T, index: number) => T } [callback]
+   * @param {Iterable<T>} iterable
+   * @param { (value: T, index: number, thisArg: thisArg) => T } [callback]
    * @param {*} [thisArg]
    */
   static from(iterable, callback, thisArg) {
-    var collection = new this({ _typeDefinitionFromIterable: iterable })
+    var collection = new this()
     var preparedNodes = Node.prepare.apply(Node, arguments)
     collection.head = preparedNodes.head
 
@@ -173,7 +175,7 @@ export default class Collection {
    * @param  {...T} items
    */
   static of(...items) {
-    var collection = new this({ _typeDefinitionFromIterable: items })
+    var collection = new this()
     var preparedNodes = Node.prepare(items)
     collection.head = preparedNodes.head
 

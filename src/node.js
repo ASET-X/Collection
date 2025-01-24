@@ -1,3 +1,5 @@
+"use strict"
+
 import {
   assert,
   isFunction,
@@ -9,9 +11,6 @@ import {
  * @template T
  */
 export default class Node {
-  /** @type {Node<T>} */
-  _next = null
-
   /**
    * @param {T} data
    * @param {Node<T>} [node]
@@ -21,9 +20,12 @@ export default class Node {
     this.next = node
   }
 
+  /** @type {Node<T>} */
+  _next = null
+
   set next(node) {
     assert(Node.isNode(node) || isNotDefined(node), "next must be a Node or null")
-    this._next = node
+    this._next = (node || null)
   }
 
   get next() { return (this._next || null) }
@@ -35,23 +37,27 @@ export default class Node {
 
   /**
    * @template T
-   * @param {Iterable<T> | Array<T>} target
-   * @param { (value: T, index: number) => T } [callback]
+   * @param {Iterable<T>} target
+   * @param { (value: T, index: number, thisArg: thisArg) => T } [callback]
    * @param {*} [thisArg]
-   * @return {{ head: ?Node<T>, tail: ?Node<T>, length: number }}
    */
   static prepare(target, callback, thisArg) {
     assert(isIterable(target), "Unexpected argument. Argument target must be Iterable with [Symbol.iterator].")
 
     if (arguments.length === 1) {
-      return innerPrepare(target)
+      return prepare(target)
     }
 
-    return innerPrepareWithCallback(target, callback, thisArg)
+    return prepareWithCallback(target, callback, thisArg)
   }
 }
 
-function innerPrepare(target) {
+/**
+ * @template T
+ * @param {Iterable<T>} target
+ * @return {{ head: ?Node<T>, tail: ?Node<T>, length: number }}
+ */
+function prepare(target) {
   var head = null
   var tail = null
   var length = 0
@@ -72,7 +78,14 @@ function innerPrepare(target) {
   return { head, tail, length }
 }
 
-function innerPrepareWithCallback(target, callback, thisArg) {
+/**
+ * @template T
+ * @param {Iterable<T>} target
+ * @param { (value: T, index: number, thisArg: thisArg) => T } [callback]
+ * @param {*} [thisArg]
+ * @return {{ head: ?Node<T>, tail: ?Node<T>, length: number }}
+ */
+function prepareWithCallback(target, callback, thisArg) {
   assert(isFunction(callback), "Unexpected argument. Argument callback must be function")
 
   var head = null
@@ -80,7 +93,7 @@ function innerPrepareWithCallback(target, callback, thisArg) {
   var length = 0
 
   for (const element of target) {
-    var node = new Node(callback.call(thisArg, element, length))
+    var node = new Node(callback(element, length, thisArg))
 
     length++
 
