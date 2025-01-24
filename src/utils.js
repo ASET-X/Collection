@@ -1,10 +1,13 @@
+"use strict"
+
 /** @return {value is unknown} */
 export function isDefined(value) {
   return (value !== void 0) && (value !== null)
 }
+
 /** @return {value is (void | null)} */
 export function isNotDefined(value) {
-  return (value === void 0) || (value === null)
+  return (value == null)
 }
 
 /** @return {value is number} */
@@ -54,6 +57,7 @@ export function assert(condition, message) {
   }
 }
 
-assert.fail = function (message) {
-  throw new Error(message || "Unexpected error.")
+assert.fail = function (message, base) {
+  if(!base) base = Error
+  throw new base(message || "Unexpected error.")
 }

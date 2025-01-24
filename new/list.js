@@ -1,15 +1,20 @@
 "use strict"
 
-import Collection from "./collection.js"
-import Node from "./node.js"
-import { bubbleSort } from "c:/Users/telma/Desktop/Collection-main/src/sort/bubblesort.js"
-import { assert, isFunction, isInteger, isIterable, isNumber } from "./utils.js"
+import Collection from "../src/collection.js"
+import inherit from "../src/inherit.js"
+import Node from "../src/node.js"
+import { bubbleSort } from "../src/sort/bubblesort.js"
+import { assert, isFunction, isIterable } from "../src/utils.js"
 
-/**
- * @template T
- * @extends Collection<T>
- */
-export default class List extends Collection {
+export default function List(...items) {
+  if (!isFunction(new.target)) {
+    return new List(...items)
+  }
+
+  List.super(this, ...items)
+}
+
+const proto = {
   /**
    * @param  {...T} items
    */
@@ -25,7 +30,7 @@ export default class List extends Collection {
     }
 
     return this
-  }
+  },
 
   pop() {
     if (!this.head) return null
@@ -45,7 +50,7 @@ export default class List extends Collection {
     curr.next = null
 
     return last.data
-  }
+  },
 
   /**
    * @param  {...T} items
@@ -60,7 +65,7 @@ export default class List extends Collection {
     }
 
     return this
-  }
+  },
 
   shift() {
     if (!this.head) return null
@@ -71,7 +76,7 @@ export default class List extends Collection {
     head.next = null
 
     return head.data
-  }
+  },
 
   indexOf(item) {
     var index = 0
@@ -82,7 +87,7 @@ export default class List extends Collection {
     }
 
     return -1
-  }
+  },
 
   /**
    * @param {number} index
@@ -98,7 +103,7 @@ export default class List extends Collection {
     }
 
     return null
-  }
+  },
 
   /**
    * @template U
@@ -118,7 +123,7 @@ export default class List extends Collection {
     }
 
     return this
-  }
+  },
 
   reverse() {
     var node = this.head
@@ -133,7 +138,7 @@ export default class List extends Collection {
 
     this.head = previous
     return this
-  }
+  },
 
   /**
    * @param { (value: T, index: number, thisArg: this) => boolean } predicate
@@ -148,7 +153,7 @@ export default class List extends Collection {
     }
 
     return null
-  }
+  },
 
   /**
    * @param { (value: T, index: number, thisArg: this) => boolean } predicate
@@ -165,7 +170,7 @@ export default class List extends Collection {
     }
 
     return pass
-  }
+  },
 
   /**
    * @template U
@@ -180,7 +185,7 @@ export default class List extends Collection {
     clone.head = head
 
     return clone
-  }
+  },
 
   /**
    * @param { (value: T, nextValue: T) => (-1 | 0 | 1) } comparator
@@ -193,7 +198,7 @@ export default class List extends Collection {
     }
 
     return this
-  }
+  },
 
   /**
    * @param { (value: T, index: number, thisArg: this) => boolean } predicate
@@ -212,5 +217,7 @@ export default class List extends Collection {
     }
 
     return this.constructor.from(array)
-  }
+  },
 }
+
+List.super = inherit(List, Collection, proto)
