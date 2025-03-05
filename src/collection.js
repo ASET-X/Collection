@@ -149,8 +149,7 @@ export default class Collection {
     if (isFunction(callback)) {
       array = array.map(callback)
     }
-
-    console.table(this.toArray())
+    console.table(array)
 
     return this
   }

@@ -1,18 +1,7 @@
-import Collection from "./collection.js"
-import List from "./list.js"
-import Node from "./node.js"
-import Queue from "./queue.js"
-import Stack from "./stack.js"
-
-export {
-  defaultComparator,
-  isIterable,
-} from "./utils.js"
-
-export {
-  Collection,
-  List,
-  Node,
-  Queue,
-  Stack,
-}
+export { default as Collection } from "./collection.js"
+export { default as List } from "./list.js"
+export { default as Node } from "./node.js"
+export { default as Queue } from "./queue.js"
+export { default as Stack } from "./stack.js"
+export { default as comparator } from "./utils/comparator.js"
+export { isIterable } from "./utils/types.js"

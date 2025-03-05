@@ -28,7 +28,6 @@ const proto = {
         this.tail.next = head
       }
     }
-
     return this
   },
 
@@ -36,7 +35,6 @@ const proto = {
     if (!this.head) return null
 
     var curr = this.head
-
     if (!curr.next) {
       this.head = null
       return curr.data
@@ -48,7 +46,6 @@ const proto = {
 
     var last = curr.next
     curr.next = null
-
     return last.data
   },
 
@@ -56,14 +53,12 @@ const proto = {
    * @param  {...T} items
    */
   unshift(...items) {
-
     var { head, tail, length } = Node.prepare(items)
 
     if (length > 0) {
       tail.next = this.head || null
       this.head = head
     }
-
     return this
   },
 
@@ -71,21 +66,17 @@ const proto = {
     if (!this.head) return null
 
     var head = this.head
-
     this.head = (head.next ?? null)
     head.next = null
-
     return head.data
   },
 
   indexOf(item) {
     var index = 0
-
     for (var curr of this) {
       if (curr === item) return index
       index++
     }
-
     return -1
   },
 
@@ -97,11 +88,9 @@ const proto = {
       "Index must be more than Zero or equal to Zero [0].")
 
     var i = 0
-
     for (const item of this) {
-      if (i++ === index) { return item }
+      if (i++ === index) return item
     }
-
     return null
   },
 
@@ -115,13 +104,11 @@ const proto = {
       "iterable must be Array or instance of Collection.")
 
     var { head } = Node.prepare(iterable)
-
     if (this.isEmpty()) {
       this.head = head
     } else {
       this.tail.next = head
     }
-
     return this
   },
 
@@ -147,11 +134,9 @@ const proto = {
     assert(isFunction(predicate), "predicate must be a function.")
 
     var index = 0
-
     for (const curr of this) {
       if (!!predicate(curr, index++, this)) return curr
     }
-
     return null
   },
 
@@ -163,13 +148,24 @@ const proto = {
 
     var index = 0
     var pass = false
-
     for (const curr of this) {
       pass = !!predicate(curr, index++, this)
-      if (!pass) { return false }
+      if (!pass) return false
     }
-
     return pass
+  },
+
+  /**
+   * @param { (value: T, index: number, thisArg: this) => boolean } predicate
+   */
+  some(predicate) {
+    assert(isFunction(predicate), "predicate must be a function.")
+
+    var index = 0
+    for (const curr of this) {
+      if (!!predicate(curr, index++, this)) return true
+    }
+    return false
   },
 
   /**
@@ -183,7 +179,6 @@ const proto = {
     var clone = new this.constructor()
     var { head } = Node.prepare(this, callback, clone)
     clone.head = head
-
     return clone
   },
 
@@ -196,7 +191,6 @@ const proto = {
     if (!this.isEmpty()) {
       bubbleSort(this, comparator)
     }
-
     return this
   },
 
@@ -209,13 +203,11 @@ const proto = {
 
     var array = []
     var index = 0
-
     for (const item of this) {
       if (!!predicate(item, index++, this)) {
         array.push(item)
       }
     }
-
     return this.constructor.from(array)
   },
 }

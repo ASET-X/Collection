@@ -21,10 +21,8 @@ export function bubbleSort(target, comparator) {
         curr.next.data = temp
         swapped = true
       }
-
       curr = curr.next
     }
-
     curr = target.head
   }
 }

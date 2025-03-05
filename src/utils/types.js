@@ -2,7 +2,7 @@
 
 /** @return {value is unknown} */
 export function isDefined(value) {
-  return (value !== void 0) && (value !== null)
+  return (value != null)
 }
 
 /** @return {value is (void | null)} */
@@ -41,12 +41,4 @@ export function isInteger(value) {
 
 export function isUnsignedInteger(value) {
   return (isInteger(value) && (value >= 0))
-}
-
-export function defaultComparator(a, b) {
-  if (a === b) {
-    return 0;
-  }
-
-  return a < b ? -1 : 1;
 }

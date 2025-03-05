@@ -23,12 +23,12 @@ export default class Node {
   /** @type {Node<T>} */
   _next = null
 
+  get next() { return (this._next || null) }
+
   set next(node) {
     assert(Node.isNode(node) || isNotDefined(node), "next must be a Node or null")
     this._next = (node || null)
   }
-
-  get next() { return (this._next || null) }
 
   /** @return {value is Node<unknown>} */
   static isNode(value) {
@@ -47,7 +47,6 @@ export default class Node {
     if (arguments.length === 1) {
       return prepare(target)
     }
-
     return prepareWithCallback(target, callback, thisArg)
   }
 }
@@ -71,7 +70,6 @@ function prepare(target) {
     } else {
       tail.next = node
     }
-
     tail = node
   }
 
@@ -94,7 +92,6 @@ function prepareWithCallback(target, callback, thisArg) {
 
   for (const element of target) {
     var node = new Node(callback(element, length, thisArg))
-
     length++
 
     if (!head) {
@@ -102,7 +99,6 @@ function prepareWithCallback(target, callback, thisArg) {
     } else {
       tail.next = node
     }
-
     tail = node
   }
 

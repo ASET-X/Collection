@@ -9,15 +9,12 @@ import { isObject, } from "./types.js"
  * @param {object} proto
  */
 export default function inherit(Child, Parent, proto) {
-  // Object.setPrototypeOf(Child.prototype, Parent.prototype)
-
   Child.prototype.__proto__ = Parent.prototype
   Child.__proto__ = Parent
 
   if (isObject(proto)) {
     Object.assign(Child.prototype, proto)
   }
-
   return inherit.createSuper(Parent)
 }
 

@@ -21,7 +21,6 @@ export default class Queue extends Collection {
         this.tail.next = head
       }
     }
-
     return this
   }
 
@@ -29,7 +28,6 @@ export default class Queue extends Collection {
     if (!this.head) return null
 
     var head = this.head
-
     this.head = (head.next ?? null)
     head.next = null
 

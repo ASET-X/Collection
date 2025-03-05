@@ -12,14 +12,11 @@ export default class Stack extends Collection {
    * @param  {...T} items
    */
   push(...items) {
-
     var { head, tail, length } = Node.prepare(items)
-
     if (length > 0) {
       tail.next = this.head || null
       this.head = head
     }
-
     return this
   }
 
@@ -27,7 +24,6 @@ export default class Stack extends Collection {
     if (!this.head) return null
 
     var head = this.head
-
     this.head = (head.next ?? null)
     head.next = null
 

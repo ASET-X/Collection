@@ -19,7 +19,6 @@ export default class List extends Collection {
    */
   push(...items) {
     var { head, length } = Node.prepare(items)
-
     if (length > 0) {
       if (!this.head) {
         this.head = head
@@ -27,7 +26,6 @@ export default class List extends Collection {
         this.tail.next = head
       }
     }
-
     return this
   }
 
@@ -35,7 +33,6 @@ export default class List extends Collection {
     if (!this.head) return null
 
     var curr = this.head
-
     if (!curr.next) {
       this.head = null
       return curr.data
@@ -47,7 +44,6 @@ export default class List extends Collection {
 
     var last = curr.next
     curr.next = null
-
     return last.data
   }
 
@@ -55,14 +51,12 @@ export default class List extends Collection {
    * @param  {...T} items
    */
   unshift(...items) {
-
     var { head, tail, length } = Node.prepare(items)
 
     if (length > 0) {
-      tail.next = this.head || null
+      tail.next = this.head || null;
       this.head = head
     }
-
     return this
   }
 
@@ -70,21 +64,17 @@ export default class List extends Collection {
     if (!this.head) return null
 
     var head = this.head
-
-    this.head = (head.next ?? null)
+    this.head = (head.next ?? null);
     head.next = null
-
     return head.data
   }
 
   indexOf(item) {
     var index = 0
-
     for (var curr of this) {
       if (curr === item) return index
-      index++
+      index++;
     }
-
     return -1
   }
 
@@ -96,11 +86,9 @@ export default class List extends Collection {
       "Index must be more than Zero or equal to Zero [0].")
 
     var i = 0
-
     for (const item of this) {
-      if (i++ === index) { return item }
+      if (i++ === index) return item
     }
-
     return null
   }
 
@@ -114,13 +102,11 @@ export default class List extends Collection {
       "iterable must be Array or instance of Collection.")
 
     var { head } = Node.prepare(iterable)
-
     if (this.isEmpty()) {
       this.head = head
     } else {
       this.tail.next = head
     }
-
     return this
   }
 
@@ -129,10 +115,10 @@ export default class List extends Collection {
     var previous = null
 
     while (node) {
-      var save = node.next
+      var temp = node.next
       node.next = previous
       previous = node
-      node = save
+      node = temp
     }
 
     this.head = previous
@@ -146,11 +132,9 @@ export default class List extends Collection {
     assert(isFunction(predicate), "predicate must be a function.")
 
     var index = 0
-
     for (const curr of this) {
       if (!!predicate(curr, index++, this)) return curr
     }
-
     return null
   }
 
@@ -162,13 +146,24 @@ export default class List extends Collection {
 
     var index = 0
     var pass = false
-
     for (const curr of this) {
       pass = !!predicate(curr, index++, this)
-      if (!pass) { return false }
+      if (!pass) return false
     }
-
     return pass
+  }
+
+  /**
+   * @param { (value: T, index: number, thisArg: this) => boolean } predicate
+   */
+  some(predicate) {
+    assert(isFunction(predicate), "predicate must be a function.")
+
+    var index = 0
+    for (const curr of this) {
+      if (!!predicate(curr, index++, this)) return true
+    }
+    return false
   }
 
   /**
@@ -182,7 +177,6 @@ export default class List extends Collection {
     var clone = new this.constructor()
     var { head } = Node.prepare(this, callback, clone)
     clone.head = head
-
     return clone
   }
 
@@ -195,7 +189,6 @@ export default class List extends Collection {
     if (!this.isEmpty()) {
       bubbleSort(this, comparator)
     }
-
     return this
   }
 
@@ -208,13 +201,11 @@ export default class List extends Collection {
 
     var array = []
     var index = 0
-
     for (const item of this) {
       if (!!predicate(item, index++, this)) {
         array.push(item)
       }
     }
-
     return this.constructor.from(array)
   }
 }
